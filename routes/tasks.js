@@ -92,7 +92,7 @@ router.put('/:id(\\d+)', taskValidator, asyncHandler(async (req, res) => {
     if (validatorErrors.isEmpty()) {
 
         await task.save()
-        res.json({ task })
+        res.json(task)
     } else {
         const hours = Math.floor(estimatedTime / 60);
         const minutes = estimatedTime % 60;
