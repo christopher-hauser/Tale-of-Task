@@ -15,6 +15,7 @@ const tasksRouter = require('./routes/tasks')
 
 const { sessionSecret } = require('./config/index')
 const { restoreUser } = require('./auth');
+const { List } = require('./db/models')
 
 const app = express();
 
@@ -51,6 +52,20 @@ app.use('/lists', listsRouter)
 
 app.use('/tasks', tasksRouter);
 
+app.all('*', async (req, res, next) => {
+  if (req.session.auth) {
+    const userId = req.session.auth.userId;
+    const usersInbox = await List.findOne({
+      where: {
+        userId,
+        name: "Inbox"
+      }
+    })
+    res.redirect(`/lists/${usersInbox.id}`)
+  } else {
+    res.redirect('/users/login')
+  }
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

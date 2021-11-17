@@ -6,3 +6,12 @@
   width: 200px;
   height: 175px;
 }
+
+#update-list-popup {
+  display: none;
+  border: 2px solid blue;
+  padding: 10px;
+  margin: 20px;
+  width: 200px;
+  height: 175px;
+}

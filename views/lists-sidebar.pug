@@ -3,14 +3,22 @@ div
     each list in lists
       li
         a(href= `/lists/${list.id}`)=list.name
-        button Update
-        button Delete
+        button(class='update-list-buttons' id=`update-list-${list.id}`) Update
+        button(class='delete-list-buttons' id=`delete-list-${list.id}`) Delete
   button#add-list-button Add List
 
 div#add-list-popup
   +validationErrorSummary(errors)
-  form(action= "/lists" method= "post")
+  form#add-list-form(action= "/lists" method= "post")
     +field('List Name', 'name', '')
-    input(type="hidden" name="_csrf" value=csrfToken)
-    button#submit-add-list Add
+    input(type="hidden" name="_csrf" id="addCsrf" value=csrfToken)
+    button#submit-add-list(type="submit") Add
     button#cancel-add-list(type="button") Cancel
+
+div#update-list-popup
+  +validationErrorSummary(errors)
+  form#update-list-form
+    +field('List Name', 'name', '')
+    input(type="hidden" name="_csrf" id="updateCsrf" value=csrfToken)
+    button#submit-update-list(type="submit") Update
+    button#cancel-update-list(type="button") Cancel

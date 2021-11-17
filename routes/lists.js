@@ -13,23 +13,25 @@ const userValidators = [
         .withMessage('List name must not exceed 50 characters')
 ]
 
+
 //MAY NOT USE - how do we redirect to the inbox automatically?
-router.get('/', csrfProtection, asyncHandler(async (req, res, next) => {
-    const userId = req.session.auth.userId;
-    let lists = await List.findAll({
-        where: {
-            userId
-        }
-    })
-    JSON.stringify(lists)
+// router.get('/', csrfProtection, asyncHandler(async (req, res, next) => {
+//     const userId = req.session.auth.userId;
+//     let lists = await List.findAll({
+//         where: {
+//             userId
+//         }
+//     })
+//     JSON.stringify(lists)
 
-    res.render('user-task-list', {
-        lists,
-        csrfToken: req.csrfToken()
-    })
-}))
+//     res.render('user-task-list', {
+//         lists,
+//         csrfToken: req.csrfToken()
+//     })
+// }))
 
-router.post('/', userValidators, asyncHandler(async (req, res, next) => {
+
+router.post('/', csrfProtection, userValidators, asyncHandler(async (req, res, next) => {
     //add csrf
     const userId = req.session.auth.userId;
     const { name } = req.body;
@@ -37,7 +39,6 @@ router.post('/', userValidators, asyncHandler(async (req, res, next) => {
         name
     })
 
-    //For Sidebar
     let lists = await List.findAll({
         where: {
             userId
@@ -47,26 +48,29 @@ router.post('/', userValidators, asyncHandler(async (req, res, next) => {
 
     const validatorErrors = validationResult(req);
 
+    // On success
     if (validatorErrors.isEmpty()) {
         list.userId = userId
         await list.save()
         res.locals.list = list;
-
-        res.redirect(`/lists/${list.id}`)
+        res.json({
+            message: list.id,
+            csrfToken: req.csrfToken()
+        })
+        // On errors
     } else {
         const errors = validatorErrors.array().map(err => err.msg)
-        res.render('user-task-list', {
-            lists,
-            errors
-            //csrftoken
+        res.json({
+            errors,
+            csrfToken: req.csrfToken()
         })
     }
 }))
 
-router.get('/:id(\\d+)', asyncHandler(async (req, res, next) => {
+router.get('/:id(\\d+)', csrfProtection, asyncHandler(async (req, res, next) => {
     const userId = req.session.auth.userId;
     const listId = parseInt(req.params.id, 10);
-    //For Sidebar
+
     let lists = await List.findAll({
         where: {
             userId
@@ -76,6 +80,17 @@ router.get('/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
     //Set res.locals.list to currentList
     const currentList = await List.findByPk(listId);
+
+    if (currentList === null) {
+        let inbox = await List.findOne({
+            where: {
+                userId,
+                name: "Inbox"
+            }
+        })
+        return res.redirect(`/lists/${inbox.id}`)
+    }
+
     res.locals.list = currentList;
 
     const tasks = await Task.findAll({
@@ -88,19 +103,33 @@ router.get('/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
     res.render('user-task-list', {
         lists,
-        tasks
+        tasks,
+        csrfToken: req.csrfToken()
     });
 }))
 
 router.delete('/:id(\\d+)', asyncHandler(async (req, res, next) => {
-    // Is listId in req.params already? Is it tied to the button? HOW DO WE GET THIS.
-    const listId = req.params.listId
+    const userId = req.session.auth.userId;
+    const listId = req.params.id
     const list = await List.findByPk(listId);
     await list.destroy();
-    res.json({ message: "List successfully deleted" })
+
+    // FIND ALL LISTS TO NAVIGATE TO THE FIRST OF THE USER'S LISTS
+    let lists = await List.findAll({
+        where: {
+            userId
+        }
+    })
+    JSON.stringify(lists)
+
+    let currentList = lists[0];
+    res.json({
+        message: currentList.id
+    })
 }))
 
-router.put('/:id(\\d+)', userValidators, asyncHandler(async(req, res) => {
+router.put('/:id(\\d+)', csrfProtection, userValidators, asyncHandler(async (req, res) => {
+    const userId = req.session.auth.userId;
     const listId = parseInt(req.params.id, 10);
     const list = await List.findByPk(listId);
     const {
@@ -111,15 +140,33 @@ router.put('/:id(\\d+)', userValidators, asyncHandler(async(req, res) => {
         name
     })
 
+    let lists = await List.findAll({
+        where: {
+            userId
+        }
+    })
+    JSON.stringify(lists)
+
+    const tasks = await Task.findAll({
+        where: {
+            listId
+        }
+    })
+
+    JSON.stringify(tasks);
+
     const validatorErrors = validationResult(req);
     if (validatorErrors.isEmpty()) {
         await list.save();
-        res.render('user-task-list')
+        return res.json({
+            message: list.id,
+            csrfToken: req.csrfToken()
+        })
     } else {
         const errors = validatorErrors.array().map(error => error.msg);
         return res.json({
             errors,
-            csrfToken: req.csrfToken(),
+            csrfToken: req.csrfToken()
         })
     }
 
