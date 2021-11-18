@@ -102,11 +102,12 @@ router.get('/:id(\\d+)', csrfProtection, asyncHandler(async (req, res, next) => 
 
     const tasks = await Task.findAll({
         where: {
-            listId
+            listId,
+            completed: false
         },
         order: [
-            ['importance', 'DESC'],
-            ['updatedAt', 'DESC']
+            ['dueDate', 'DESC'],
+            ['importance', 'DESC']
         ]
     })
 
@@ -163,8 +164,8 @@ router.put('/:id(\\d+)', csrfProtection, userValidators, asyncHandler(async (req
 
     JSON.stringify(tasks);
 
-     // Check if name of list exists in this user's lists already
-     const checkList = await List.findOne({
+    // Check if name of list exists in this user's lists already
+    const checkList = await List.findOne({
         where: {
             name,
             userId

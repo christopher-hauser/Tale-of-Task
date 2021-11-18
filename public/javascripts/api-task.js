@@ -171,6 +171,7 @@ const addSaveFunction = (button, form) => {
             const li = document.getElementById(`task-list-${taskId}`);
             li.innerText = dataObj.description;
             updateForm.remove();
+
         }
     })
 };
@@ -238,7 +239,7 @@ const addUpdateFunction = (button) => {
 
         dueDateLabel.for = 'dueDate';
         dueDateLabel.innerText = 'Due Date';
-        dueDateInput.type = 'datetime-local';
+        dueDateInput.type = 'date';
         dueDateInput.id = `dueDate-${taskId}`;
         dueDateInput.value = dueDate;
 
@@ -296,3 +297,50 @@ const addUpdateFunction = (button) => {
     })
 
 }
+
+const createLiDiv = (task) => {
+    const div = document.createElement('div');
+    div.id = `task-container-${task.id}`;
+
+    const li = document.createElement('li');
+    li.id = `task-list-${task.id}`;
+    li.innerText = task.description;
+
+    const upd = document.createElement('button');
+    upd.id = `update-${task.id}`;
+    upd.className = 'update-task-btn';
+    upd.innerText = 'Update';
+
+    const del = document.createElement('button');
+    del.id = `delete-${task.id}`;
+    del.className = 'delete-task-btn';
+    del.innerText = 'Delete';
+
+    div.appendChild(li);
+    div.appendChild(upd);
+    div.appendChild(del);
+
+    addUpdateFunction(upd);
+    addDeleteFunction(del);
+
+    return div;
+}
+
+// Receive a collection of tasks and render it on page dynamically
+// The collection that is received can be any kind of list
+// Whether it is list-specific, search-filtered, etc.
+// This function will render that list
+// Use this for search, updating priority and due date and completed
+
+const taskListGen = (tasks) => {
+    const ul = document.getElementById('task-list-render');
+
+    for (let li of ul.children) {
+        li.remove();
+    }
+
+    for (let task in tasks) {
+        const div = createLiDiv(task);
+        ul.appendChild(div);
+    }
+};

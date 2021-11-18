@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
     dueDate: {
-      type: DataTypes.DATE
+      type: DataTypes.DATEONLY
     },
     estimatedTime: {
       type: DataTypes.INTEGER
@@ -32,9 +32,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN
     },
   }, {});
-  Task.associate = function(models) {
-    Task.belongsTo(models.User, {foreignKey: 'userId'})
-    Task.belongsTo(models.List, {foreignKey: 'listId'})
+  Task.associate = function (models) {
+    Task.belongsTo(models.User, { foreignKey: 'userId' })
+    Task.belongsTo(models.List, { foreignKey: 'listId' })
     Task.hasMany(models.Subtask, {
       foreignKey: 'taskId',
     })

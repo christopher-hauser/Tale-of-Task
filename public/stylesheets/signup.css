@@ -34,57 +34,41 @@ ul {
     margin-bottom: 30px;
 }
 
-#login-container {
-    left: 50%;
+h1 {
+    display: flex;
+    justify-content: right;
+    font: 70px 'Oranienbaum', serif;
+    color:black;
+    margin-bottom: 25px;
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+}
+
+.signup-div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* #register-container {
+    position: fixed;
+} */
+
+#signup-container {
+    left: 37.5%;
     padding: 50px;
     position: fixed;
-    top: 50%;
+    top: 45%;
     transform: translate(-50%, -50%);
     display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.login-div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#title {
-    font: 70px 'Oranienbaum', serif;
-    border-bottom: 1px solid black;
-}
-
-#title-kata {
-    font-family: 'Noto Serif JP', serif;
-    margin: 10px;
-}
-
-#login-sprites {
-    margin: 25px;
 }
 
 label {
     color:rgb(51, 51, 51);
     font-weight: bold;
-}
-
-#register {
-    text-align: center;
-}
-
-#register a {
-    color:rgb(51, 51, 51);
-    text-decoration: none;
-}
-
-#register a:hover {
-    color: rgb(33, 135, 182);
-}
-
-.label-text {
-    margin: 10px;
+    width: 150px;
+    display: inline-flex;
+    justify-content: right;
+    margin-right: 20px;
 }
 
 input {
@@ -93,38 +77,52 @@ input {
     width: 250px;
     height: 25px;
     text-align: center;
+    margin: 10px 0px;
 }
 
-.login-button {
+#bottom-div {
+    display: flex;
+    justify-content: right;
+}
+
+.start-button {
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 24px;
     font-weight: bold;
     height: 50px;
-    width: 150px;
+    width: 200px;
     border-radius: 5px;
     letter-spacing: 2px;
     color:white;
-    margin: 50px 15px 30px 15px;
+    margin: 40px 0px 30px 0px;
     filter: drop-shadow(2.5px 2.5px 5px lightgrey);
     padding-bottom: 5px;
-}
-
-.login-button:hover{
-    filter: drop-shadow(0px 0px 10px rgb(255, 230, 120));
-    cursor: pointer;
-}
-
-#login {
     background: linear-gradient(to right top, rgb(42, 99, 26), rgb(80, 216, 62));
     border: 1px solid rgb(118, 179, 105);
 }
 
-#demo {
-    background: linear-gradient(to right top, rgb(26, 70, 99), rgb(62, 185, 216));
-    border: 1px solid rgb(105, 152, 179);
+.start-button:hover{
+    filter: drop-shadow(0px 0px 10px rgb(255, 230, 120));
+    cursor: pointer;
 }
 
-.sprite {
-    height: 100px;
-    transition: opacity 1s;
+#signup-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-link-div {
+    display: flex;
+    justify-content: right;
+    /* margin-top: 15px; */
+}
+
+a {
+    color:rgb(51, 51, 51);
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(33, 135, 182);
 }

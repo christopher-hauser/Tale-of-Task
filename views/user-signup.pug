@@ -1,12 +1,46 @@
-extends layout.pug
 include utils.pug
-block content
-    +validationErrorSummary(errors)
-    form(action="/users/signup" method="post")
-        +field('First Name', 'firstName', firstName)
-        +field('Last Name', 'lastName', lastName)
-        +field('Email Address', 'email', email, 'email')
-        +field('Password', 'password', "", 'password')
-        +field('Confirm Password', 'confirmPassword', "", 'password')
-        input(type="hidden", name="_csrf", value=csrfToken)
-        button Sign Up
+
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Register
+        link(rel='stylesheet' href='/stylesheets/signup.css')
+        link(rel="preconnect" href="https://fonts.googleapis.com")
+        link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+        link(href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&family=Noto+Sans+JP&family=Noto+Serif+JP&family=Oranienbaum&family=Press+Start+2P&display=swap" rel="stylesheet")
+    body
+
+    body
+        #register-container
+            #signup-container
+                .signup-div
+                    div
+                        h1 Register
+                    form(action="/users/signup" method="post")
+                        div
+                            label(for="firstName") First Name
+                            input(type="text" id="firstName" name="firstName" value=firstName)
+                        div
+                            label(for="lastName") Last Name
+                            input(type="text" id="lastName" name="lastName" value=lastName)
+                        div
+                            label(for="email") Email Address
+                            input(type="text" id="email" name="email" value=email)
+                        div
+                            label(for="password") Password
+                            input(type="password" id="password" name="password")
+                        div
+                            label(for="confirmPassword") Confirm Password
+                            input(type="password" id="confirmPassword" name="confirmPassword")
+                        input(type="hidden", name="_csrf", value=csrfToken)
+                        #bottom-div
+                            #signup-div
+                                button.start-button#signup START
+                                #login-link-div
+                                    a(href="/users/login") Back to Login
+            +validationErrorSummary(errors)
+
+            script(src="/javascripts/login.js" type="module")
