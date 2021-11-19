@@ -89,22 +89,15 @@ router.get('/:id(\\d+)/tasks', asyncHandler(async (req, res) => {
 router.get('/:id(\\d+)', csrfProtection, asyncHandler(async (req, res, next) => {
     const userId = req.session.auth.userId;
     const listId = parseInt(req.params.id, 10);
-
     let lists = await List.findAll({
         where: {
             userId
-        },
-        order: [
-            ['importance', 'DESC'],
-            ['updatedAt', 'DESC']
-        ]
+        }
     })
     JSON.stringify(lists)
-
     //Set res.locals.list to currentList
     const currentList = await List.findByPk(listId);
-
-    if (currentList === null) {
+    if (currentList === null || currentList.userId !== userId) {
         let inbox = await List.findOne({
             where: {
                 userId,
@@ -113,22 +106,30 @@ router.get('/:id(\\d+)', csrfProtection, asyncHandler(async (req, res, next) => 
         })
         return res.redirect(`/lists/${inbox.id}`)
     }
-
     res.locals.list = currentList;
-
     const tasks = await Task.findAll({
         where: {
-            listId
+            listId: listId,
+            completed: false
         },
         order: [
             ['importance', 'DESC'],
             ['updatedAt', 'DESC']
         ]
     })
-
+    const completedTasks = await Task.findAll({
+        where: {
+            listId: listId,
+            completed: true
+        },
+        order: [
+            ['updatedAt', 'DESC']
+        ],
+        limit: 30
+    })
     JSON.stringify(tasks);
-
     res.render('user-task-list', {
+        completedTasks,
         lists,
         tasks,
         csrfToken: req.csrfToken()

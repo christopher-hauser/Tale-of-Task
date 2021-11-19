@@ -5,6 +5,10 @@ block content
     script(src='/javascripts/api-task.js' type='module')
     include lists-sidebar.pug
 
+    #tasks-completed
+        ul#tasks-completed-list
+            each completedTask in completedTasks
+                li= completedTask.description
 
     #task-list-main
         input(id="searchbar" type="text" name="search" placeholder="Search task")
@@ -37,4 +41,5 @@ block content
                             li(id=`task-list-${task.id}` class="search-list") #{task.description}
                             button(id=`update-${task.id}` class="update-task-btn") Update
                             button(id=`delete-${task.id}` class="delete-task-btn") Delete
+                            button(id=`complete-${task.id}` class="completed-task-btn") Completed
                 else
