@@ -56,3 +56,16 @@
     filter: none;
     color: gold;
 }
+
+.name-container {
+    color: white;
+}
+
+.about-links-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.about-links {
+    color: white;
+}
