@@ -26,13 +26,13 @@ html
         #nav-contents
           #navtop
               span#main-title TALE Of TASK
-              #exp-count
-                  span#user-exp-label EXP
-                  span#user-exp-num #{user.exp} / 1000
-              form(action='/users/logout' method='post')
-                button#logout Log Out
-          #exp-container
-              #exp-bar
-                  #exp-progress(style=`width: ${user.exp / 10}%`)
+      //-         #exp-count
+      //-             span#user-exp-label EXP
+      //-             span#user-exp-num #{user.exp} / 1000
+      //-         form(action='/users/logout' method='post')
+      //-           button#logout Log Out
+      //-     #exp-container
+      //-         #exp-bar
+      //-             #exp-progress(style=`width: ${user.exp / 10}%`)
       block content
       include moogleInfo.pug
